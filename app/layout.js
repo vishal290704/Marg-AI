@@ -21,12 +21,12 @@ export default function RootLayout({ children }) {
   className={inter.className}
 >
       <body className="min-h-full flex flex-col">
-                 {/* <ThemeProvider
+                 <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
-          > */}
+          >
             {/*Header*/}
             <Header/>
             <main className="min-h-screen">
@@ -41,7 +41,7 @@ export default function RootLayout({ children }) {
               </div>
             </footer>
          
-          {/* </ThemeProvider> */}
+          </ThemeProvider>
 
         </body>
     </html>
