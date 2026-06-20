@@ -88,13 +88,13 @@ const Header = () => {
 
           {/* Auth Buttons */}
           <Show when="signed-out">
-            <SignInButton mode="modal">
+            <SignInButton mode="redirect">
               <Button variant="outline">Sign In</Button>
             </SignInButton>
 
-            <SignUpButton mode="modal">
+            {/* <SignUpButton mode="redirect">
               <Button>Get Started</Button>
-            </SignUpButton>
+            </SignUpButton> */}
           </Show>
 
           {/* User Menu */}
