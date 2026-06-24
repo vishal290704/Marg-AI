@@ -1,3 +1,4 @@
+'use client'
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
@@ -6,13 +7,13 @@ import Image from "next/image";
 const HeroSection = () => {
   return <section className="w-full pt-36 md:pt-48 pb-10">
     <div className="space-y-6 text-center">
-        <div>
-            <h1>
+        <div className="space-y-6 mx-auto">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl bg-gradient-to-b from-gray-400 via-gray-200 to-gray-600 text-transparent bg-clip-text font-extrabold tracking-tighter pb-2 pr-2">
                 Your AI Career Coach for
                 <br/>
                 Professional Success
             </h1>
-            <p>
+            <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl">
                 Advance your career with personalized guidance, interview prep, and AI-powered tools for job success.
             </p>
         </div>
