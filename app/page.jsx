@@ -126,8 +126,13 @@ export default function Home() {
                             height={40}
                             src={testimonial.image}
                             alt={testimonial.author}
+                            className="rounded-full object-cover border-2 border-primary/20"
                           /></div>
-                          <div></div>
+                          <div>
+                            <p className="font-semibold">{testimonial.author}</p>
+                            <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                            <p className="text-sm text-primary">{testimonial.company}</p>
+                          </div>
                         </div>
                         <blockquote></blockquote>
                       </div>
