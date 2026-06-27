@@ -4,14 +4,16 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { faqs } from "@/data/faqs";
 import { features } from "@/data/features";
 import { howItWorks } from "@/data/howItWorks";
 import { testimonial } from "@/data/testimonial";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -159,6 +161,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Frequently asked questions section */}
       <section className="w-full py-12 md:py-24 lg:py-32 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center max-w-3xl mx-auto mb-12 ">
@@ -170,14 +173,49 @@ export default function Home() {
             </p>
           </div>
           <div className="max-w-6xl mx-auto">
-            <Accordion type="single" collapsible>
-           {faqs.map((item, index) => (
-  <AccordionItem key={index} value={`item-${index}`}>
-    <AccordionTrigger>{item.question}</AccordionTrigger>
-    <AccordionContent>{item.answer}</AccordionContent>
-  </AccordionItem>
-))}
+            <Accordion type="single" collapsible className={"w-full"}>
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger>{faq.question}</AccordionTrigger>
+                  <AccordionContent>{faq.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
             </Accordion>
+          </div>
+        </div>
+      </section>
+
+      {/* Ready to accelerate section  */}
+      <section className="relative w-full overflow-hidden">
+        <div className="gradient relative py-24">
+          {/* Decorative background */}
+          <div className="absolute inset-0 bg-black/5"></div>
+          <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-white/10 blur-3xl"></div>
+          <div className="absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-white/5 blur-3xl"></div>
+
+          <div className="relative container mx-auto px-6">
+            <div className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto space-y-6">
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white">
+                Ready to Accelerate Your Career?
+              </h2>
+
+              <p className="max-w-2xl text-lg text-white/85">
+                Join thousands of professionals who are advancing their careers
+                with AI-powered guidance, personalized roadmaps, and interview
+                preparation.
+              </p>
+
+              <Link href="/dashboard">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="h-12 px-8 mt-4 animate-bounce shadow-2xl shadow-black/20 hover:scale-105 transition-all duration-300"
+                >
+                  Start Your Journey Today
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
