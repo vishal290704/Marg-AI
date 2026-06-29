@@ -1,8 +1,10 @@
 "use client";
 
-import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import { buttonVariants } from "./ui/button";
+import { cn } from "@/lib/utils";
 import React from "react";
 import { Button } from "./ui/button";
 import {
@@ -20,8 +22,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+// import { checkUser } from "@/lib/checkUser";
 
 const Header = () => {
+    // await checkUser()
   return (
     <header className="fixed top-0 w-full border bg-background/80 backdrop-blur-md z-50 supports-backdrop-filter:bg-background/60">
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -48,13 +52,16 @@ const Header = () => {
 
             {/* Growth Tools */}
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button>
-                  <StarsIcon className="h-4 w-4" />
-                  <span className="hidden md:block">Growth Tools</span>
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
+        <DropdownMenuTrigger
+  className={cn(
+    buttonVariants(),
+    "gap-2"
+  )}
+>
+  <StarsIcon className="h-4 w-4" />
+  <span className="hidden md:block">Growth Tools</span>
+  <ChevronDown className="h-4 w-4" />
+</DropdownMenuTrigger>
 
               <DropdownMenuContent>
                 <DropdownMenuGroup>
