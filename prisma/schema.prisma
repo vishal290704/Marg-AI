@@ -19,7 +19,7 @@ model User {
   name                  String?
   imageUrl              String?
   industry              String?    //E.g. tech-software-development
-  industryInsight IndustryInsights? @relation(fields: [industry], references: [industry])
+  industryInsight IndustryInsight? @relation(fields: [industry], references: [industry])
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
 
@@ -67,11 +67,43 @@ model CoverLetter{
   jobTitle              String
   createdAt             DateTime     @default(now())
   updatedAt             DateTime     @updatedAt
-  
+
   @@index([userId])
 }
 
 
-model IndustryInsights{
+model IndustryInsight{
+  id                    String        @id @default(cuid())
+  industry              String        @unique
 
+  users                 User[]
+  salaryRanges          Json[]
+
+  //Industry trends
+  growthRate            Float
+  demandLevel           DemandLevel      //High, medium, low
+  topSkills             String[]
+
+  //Market Conditions
+  marketOutlook         MarketOutlook      //Positive, Neutral, Negative
+  keyTrends             String[]
+
+  //Learning Suggestions
+  recommendedSkills     String[]
+
+  lastupdated           DateTime      @default(now())
+  nextUpdate            DateTime      //Scheduled update time
+
+  @@index([industry])
 }
+
+enum DemandLevel{
+  HIGH 
+  MEDIUM 
+  LOW
+}
+ enum MarketOutlook{
+  POSITIVE 
+  NEUTRAL 
+  NEGATIVE
+ }
