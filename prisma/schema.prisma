@@ -11,3 +11,24 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id                    String      @id @default(uuid())
+  clerkUserId           String      @unique //Clerk user Id
+  email                 String      @unique
+  name                  String?
+  imageUrl              String?
+  industry              String?    //E.g. tech-software-development
+  industryInsight IndustryInsights? @relation(fields: [industry], references: [industry])
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+
+  //Profile fields
+  bio                   String
+  experience            Int?
+  skills                String[]
+  }
+
+model IndustryInsights{
+
+}
