@@ -173,7 +173,7 @@ export default function Home() {
             </p>
           </div>
           <div className="max-w-6xl mx-auto">
-            <Accordion type="single" collapsible className={"w-full"}>
+            <Accordion type="single" collapsible="true" className={"w-full"}> 
               {faqs.map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger>{faq.question}</AccordionTrigger>
