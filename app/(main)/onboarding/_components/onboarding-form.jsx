@@ -35,6 +35,8 @@ const OnboardingForm = ({ industries }) => {
   } = useForm({
     resolver: zodResolver(onboardingSchema),
   });
+
+  console.log(selectedIndustry);
   return (
     <div className="flex items-center justify-center bg-background">
       <Card className="w-full max-w-lg mt-10 mx-2">
@@ -55,7 +57,7 @@ const OnboardingForm = ({ industries }) => {
                 onValueChange={(value) =>{
                     setValue("industry", value)
                     setSelectedIndustry(
-                        industries.find((ind) => ind.id ===value)
+                        industries.find((ind) => ind.name ===value)
                     );
                     setValue("subIndustry", "");
 
@@ -69,6 +71,32 @@ const OnboardingForm = ({ industries }) => {
                     return (
                       <SelectItem value={ind.name} key={ind.id}>
                         {ind.name}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+              {errors.industry && (
+                <p className="text-sm text-red-500 ">
+                    {errors.industry.message}
+                </p>
+              )}
+            </div>
+
+
+
+
+            <div  className="space-y-2">
+              <Label className={"mb-2"} htmlFor="subIndustry">Industry</Label>
+              <Select onValueChange={(value)=> setValue("subIndustry", value)}>
+                <SelectTrigger className="w-full" id="subIndustry">
+                  <SelectValue placeholder="Select an industry" />
+                </SelectTrigger>
+                <SelectContent>
+                  {selectedIndustry?.subIndustries.map((ind) => {
+                    return (
+                      <SelectItem value={ind} key={ind}>
+                        {ind}
                       </SelectItem>
                     );
                   })}
