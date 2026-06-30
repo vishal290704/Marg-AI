@@ -36,7 +36,8 @@ const OnboardingForm = ({ industries }) => {
     resolver: zodResolver(onboardingSchema),
   });
 
-  console.log(selectedIndustry);
+  const onSubmit =async (values)=>{}
+const watchIndustry = watch("industry")
   return (
     <div className="flex items-center justify-center bg-background">
       <Card className="w-full max-w-lg mt-10 mx-2">
@@ -50,7 +51,7 @@ const OnboardingForm = ({ industries }) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div  className="space-y-2">
               <Label className={"mb-2"} htmlFor="industry">Industry</Label>
               <Select
@@ -86,8 +87,8 @@ const OnboardingForm = ({ industries }) => {
 
 
 
-            <div  className="space-y-2">
-              <Label className={"mb-2"} htmlFor="subIndustry">Industry</Label>
+           {watchIndustry && (<div  className="space-y-2">
+              <Label className={"mb-2"} htmlFor="subIndustry">Specialization</Label>
               <Select onValueChange={(value)=> setValue("subIndustry", value)}>
                 <SelectTrigger className="w-full" id="subIndustry">
                   <SelectValue placeholder="Select an industry" />
@@ -102,12 +103,12 @@ const OnboardingForm = ({ industries }) => {
                   })}
                 </SelectContent>
               </Select>
-              {errors.industry && (
+              {errors.subIndustry && (
                 <p className="text-sm text-red-500 ">
-                    {errors.industry.message}
+                    {errors.subIndustry.message}
                 </p>
               )}
-            </div>
+            </div>)}
           </form>
         </CardContent>
       </Card>
