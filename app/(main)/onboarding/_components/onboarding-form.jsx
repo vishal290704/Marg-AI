@@ -22,6 +22,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 const OnboardingForm = ({ industries }) => {
   const [selectedIndustry, setSelectedIndustry] = useState(null);
@@ -87,7 +89,8 @@ const watchIndustry = watch("industry")
 
 
 
-           {watchIndustry && (<div  className="space-y-2">
+           {watchIndustry && (
+            <div  className="space-y-2">
               <Label className={"mb-2"} htmlFor="subIndustry">Specialization</Label>
               <Select onValueChange={(value)=> setValue("subIndustry", value)}>
                 <SelectTrigger className="w-full" id="subIndustry">
@@ -108,7 +111,66 @@ const watchIndustry = watch("industry")
                     {errors.subIndustry.message}
                 </p>
               )}
-            </div>)}
+            </div>
+        )}
+
+
+
+        <div className="space-y-2">
+              <Label className={"mb-2"} htmlFor="experience">Years of Experience</Label>
+              <Input
+              id="experience"
+              type="number"
+              min="0"
+              max="50"
+              placeholder="Enter years of experience"
+              {...register("experience")}
+              />
+             
+              {errors.experience && (
+                <p className="text-sm text-red-500 ">
+                    {errors.experience.message}
+                </p>
+              )}
+        </div>
+
+
+
+        <div className="space-y-2">
+              <Label className={"mb-2"} htmlFor="skills">Skills</Label>
+              <Input
+              id="skills"
+              placeholder="e.g., Python, JavaScript, Project Management"
+              {...register("skills")}
+              />
+              <p className="text-xs text-muted-foreground">Separate multiple skills with commas</p>
+             
+              {errors.skills && (
+                <p className="text-sm text-red-500 ">
+                    {errors.skills.message}
+                </p>
+              )}
+        </div>
+
+
+
+         <div className="space-y-2">
+              <Label className={"mb-2"} htmlFor="bio">Professional Bio</Label>
+              <Textarea
+              id="bio"
+              placeholder="Tell us about your Professional background..."
+              className="h-32"
+              {...register("bio")}
+              />
+             
+              {errors.bio && (
+                <p className="text-sm text-red-500 ">
+                    {errors.bio.message}
+                </p>
+              )}
+        </div>
+
+
           </form>
         </CardContent>
       </Card>
