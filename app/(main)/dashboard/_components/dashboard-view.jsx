@@ -78,6 +78,7 @@ const DashboardView = ({ insights }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Market Outlook Card  */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className={"text-sm font-medium"}>
@@ -93,6 +94,7 @@ const DashboardView = ({ insights }) => {
           </CardContent>
         </Card>
 
+        {/* Industry Growth Card  */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -108,6 +110,7 @@ const DashboardView = ({ insights }) => {
           </CardContent>
         </Card>
 
+        {/* Demand Level Card  */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className={"text-sm font-medium"}>
@@ -124,7 +127,7 @@ const DashboardView = ({ insights }) => {
             />
           </CardContent>
         </Card>
-
+        {/* Top Skills Card  */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Top Skills</CardTitle>
@@ -142,14 +145,15 @@ const DashboardView = ({ insights }) => {
         </Card>
       </div>
 
-              <Card>
-           <CardHeader>
+      {/* Bar Chart */}
+      <Card>
+        <CardHeader>
           <CardTitle>Salary Ranges by Role</CardTitle>
           <CardDescription>
             Displaying minimum, median, and maximum salaries (in thousands)
           </CardDescription>
         </CardHeader>
-          <CardContent>
+        <CardContent>
           <div className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={salaryData}>
@@ -180,9 +184,46 @@ const DashboardView = ({ insights }) => {
             </ResponsiveContainer>
           </div>
         </CardContent>
+      </Card>
 
+
+      {/* Industry Trends */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Key Industry Trends</CardTitle>
+            <CardDescription>
+              Current trends shaping the industry
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-4">
+              {insights.keyTrends.map((trend, index) => (
+                <li key={index} className="flex items-start space-x-2">
+                  <div className="h-2 w-2 mt-2 rounded-full bg-primary" />
+                  <span>{trend}</span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
         </Card>
 
+        <Card>
+          <CardHeader>
+            <CardTitle>Recommended Skills</CardTitle>
+            <CardDescription>Skills to consider developing</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {insights.recommendedSkills.map((skill) => (
+                <Badge key={skill} variant="outline">
+                  {skill}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
