@@ -80,7 +80,9 @@ const DashboardView = ({ insights }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className={"text-sm font-medium"}>Market Outlook</CardTitle>
+            <CardTitle className={"text-sm font-medium"}>
+              Market Outlook
+            </CardTitle>
             <OutlookIcon className={`h-4 w-4 ${OutlookColor}`} />
           </CardHeader>
           <CardContent>
@@ -91,9 +93,6 @@ const DashboardView = ({ insights }) => {
           </CardContent>
         </Card>
 
-
-
-       
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -109,26 +108,24 @@ const DashboardView = ({ insights }) => {
           </CardContent>
         </Card>
 
-
-
-         <Card>
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className={"text-sm font-medium"}>Demand Level</CardTitle>
+            <CardTitle className={"text-sm font-medium"}>
+              Demand Level
+            </CardTitle>
             <BriefcaseIcon className={"h-4 w-4 text-muted-foreground"} />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{insights.demandLevel}</div>
-              <div
+            <div
               className={`h-1 w-full rounded-full mt-2 ${getDemandLevelColor(
-                insights.demandLevel
+                insights.demandLevel,
               )}`}
             />
           </CardContent>
         </Card>
 
-
-
-                <Card>
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Top Skills</CardTitle>
             <Brain className="h-4 w-4 text-muted-foreground" />
@@ -143,9 +140,49 @@ const DashboardView = ({ insights }) => {
             </div>
           </CardContent>
         </Card>
-
-
       </div>
+
+              <Card>
+           <CardHeader>
+          <CardTitle>Salary Ranges by Role</CardTitle>
+          <CardDescription>
+            Displaying minimum, median, and maximum salaries (in thousands)
+          </CardDescription>
+        </CardHeader>
+          <CardContent>
+          <div className="h-[400px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={salaryData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip
+                  content={({ active, payload, label }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div className="bg-background border rounded-lg p-2 shadow-md">
+                          <p className="font-medium">{label}</p>
+                          {payload.map((item) => (
+                            <p key={item.name} className="text-sm">
+                              {item.name}: ${item.value}K
+                            </p>
+                          ))}
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Bar dataKey="min" fill="#94a3b8" name="Min Salary (K)" />
+                <Bar dataKey="median" fill="#64748b" name="Median Salary (K)" />
+                <Bar dataKey="max" fill="#475569" name="Max Salary (K)" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </CardContent>
+
+        </Card>
+
     </div>
   );
 };
