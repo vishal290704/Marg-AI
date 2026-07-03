@@ -114,7 +114,7 @@ const DashboardView = ({ insights }) => {
          <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className={"text-sm font-medium"}>Demand Level</CardTitle>
-            <OutlookIcon className={`h-4 w-4 ${OutlookColor}`} />
+            <BriefcaseIcon className={"h-4 w-4 text-muted-foreground"} />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{insights.demandLevel}</div>
@@ -128,16 +128,19 @@ const DashboardView = ({ insights }) => {
 
 
 
-         <Card>
+                <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className={"text-sm font-medium"}>Market Outlook</CardTitle>
-            <OutlookIcon className={`h-4 w-4 ${OutlookColor}`} />
+            <CardTitle className="text-sm font-medium">Top Skills</CardTitle>
+            <Brain className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{insights.marketOutlook}</div>
-            <p className="text-xs text-muted-foreground">
-              Next update {nextUpdateDistance}
-            </p>
+            <div className="flex flex-wrap gap-1">
+              {insights.topSkills.map((skill) => (
+                <Badge key={skill} variant="secondary">
+                  {skill}
+                </Badge>
+              ))}
+            </div>
           </CardContent>
         </Card>
 

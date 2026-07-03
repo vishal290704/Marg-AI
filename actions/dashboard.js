@@ -19,7 +19,7 @@ export const generatedAIInsights = async (industry) => {
             "growthRate": number,
             "demandLevel": "HIGH" | "MEDIUM" | "LOW",
             "topSkills": ["skill1", "skill2"],
-            "marketOutlook": "POSITIVE" | "NEUTRAL" | "NEGAIVE",
+            "marketOutlook": "POSITIVE" | "NEUTRAL" | "NEGATIVE",
             "keyTrends": ["trend1", "trend2"],
             "recommendedSkills": ["skill1", "skill2"]
           }
@@ -27,7 +27,11 @@ export const generatedAIInsights = async (industry) => {
           IMPORTANT: Return ONLY the JSON. No additional text, notes, or markdown formatting.
           Include at least 5 common roles for salary ranges.
           Growth rate should be a percentage.
-          Include at least 5 skills and trends.
+          Return exactly 6 topSkills.
+          Each skill should contain at most 2–3 words.
+          Examples:
+          ["Python", "React", "AWS", "Docker", "Kubernetes", "Machine Learning"]
+          Do not include explanations or text in parentheses.
         `;
 
   const result = await model.generateContent(prompt);
@@ -38,7 +42,10 @@ export const generatedAIInsights = async (industry) => {
   const insights = JSON.parse(cleanedText);
 
   // Normalize enum values
-  insights.demandLevel = insights.demandLevel.toUpperCase();
+ // Normalize enum values
+insights.demandLevel = insights.demandLevel.toUpperCase();
+insights.marketOutlook = insights.marketOutlook.toUpperCase();
+
 
   return insights;
 };
@@ -51,23 +58,33 @@ export async function getIndustryInsights() {
     where: {
       clerkUserId: userId,
     },
-    include:{
-      industryInsight:true,
-    }
+    include: {
+      industryInsight: true,
+    },
   });
 
-  if (!user) throw new Error("User not found");
+if (!user) throw new Error("User not found");
 
-  if (!user.industryInsight) {
-    const insights = await generatedAIInsights(user.industry);
-    const industryInsight = await db.industryInsight.create({
-      data: {
-        industry: user.industry,
-        ...insights,
-        nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      },
-    });
-    return industryInsight;
-  }
-  return user.industryInsight;
+console.log("User:", user);
+console.log("Industry:", user.industry);
+
+if (!user.industry) {
+  throw new Error("User industry is missing. Please complete onboarding again.");
+}
+
+if (!user.industryInsight) {
+  const insights = await generatedAIInsights(user.industry);
+
+  const industryInsight = await db.industryInsight.create({
+    data: {
+      industry: user.industry,
+      ...insights,
+      nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    },
+  });
+
+  return industryInsight;
+}
+
+return user.industryInsight;
 }
