@@ -1,24 +1,42 @@
-"use client"
+"use client";
 
 import React from "react";
-import {BarChart,Bar,XAxis,YAxis,CartesianGrid,Tooltip,ResponsiveContainer,} from "recharts";
-import {BriefcaseIcon,LineChart,TrendingUp,TredingDown,Brain,} from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import {
+  BriefcaseIcon,
+  LineChart,
+  TrendingUp,
+  TredingDown,
+  Brain,
+} from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
-import {Card,CardContent,CardDescription,CardHeader,  CardTitle,} from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
+const DashboardView = ({ insights }) => {
+  const salaryData = insights.salaryranges.map((range) => ({
+    name: range.role,
+    min: range.min / 1000,
+    max: range.max / 1000,
+    median: range.median / 1000,
+  }));
 
-const DashboardView = ({insights}) => {
-
-    const salaryData = insights.salaryranges.map((range)=>({
-        name:range.role,
-        min:range.min / 1000,
-        max:range.max / 1000,
-        median:range.median / 1000,
-    }))
-
-     const getDemandLevelColor = (level) => {
+  const getDemandLevelColor = (level) => {
     switch (level.toLowerCase()) {
       case "high":
         return "bg-green-500";
@@ -31,7 +49,7 @@ const DashboardView = ({insights}) => {
     }
   };
 
-    const getMarketOutlookInfo = (outlook) => {
+  const getMarketOutlookInfo = (outlook) => {
     switch (outlook.toLowerCase()) {
       case "positive":
         return { icon: TrendingU, color: "text-green-500" };
@@ -44,11 +62,16 @@ const DashboardView = ({insights}) => {
     }
   };
 
-  return (
-    <div>
-        
-    </div>
-  )
-}
+  const OutlookIcon = getMarketOutlookInfo(insights.marketOutlook).icon;
+  const OutlookColor = getMarketOutlookInfo(insights.marketOutlook).color;
 
-export default DashboardView
+  //   Formatting date using date-fns(npm i date-fns)
+  const lastUpdatedDate = format(new Date(insights.lastUpdated), "dd/MM/yyyy");
+  const nextUpdateDistance = formatDistanceToNow(
+    new Date(insights.nextUpdate),
+    { addSuffix: true },
+  );
+  return <div></div>;
+};
+
+export default DashboardView;
