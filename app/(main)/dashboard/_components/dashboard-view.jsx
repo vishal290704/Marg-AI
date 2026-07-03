@@ -29,7 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
 const DashboardView = ({ insights }) => {
-  const salaryData = insights.salaryranges.map((range) => ({
+  const salaryData = insights.salaryRanges.map((range) => ({
     name: range.role,
     min: range.min / 1000,
     max: range.max / 1000,
@@ -52,7 +52,7 @@ const DashboardView = ({ insights }) => {
   const getMarketOutlookInfo = (outlook) => {
     switch (outlook.toLowerCase()) {
       case "positive":
-        return { icon: TrendingU, color: "text-green-500" };
+        return { icon: TrendingUp, color: "text-green-500" };
       case "neutral":
         return { icon: LineChart, color: "text-yellow-500" };
       case "negative":
@@ -66,12 +66,32 @@ const DashboardView = ({ insights }) => {
   const OutlookColor = getMarketOutlookInfo(insights.marketOutlook).color;
 
   //   Formatting date using date-fns(npm i date-fns)
-  const lastUpdatedDate = format(new Date(insights.lastUpdated), "dd/MM/yyyy");
+  const lastUpdatedDate = format(new Date(insights.lastupdated), "dd/MM/yyyy");
   const nextUpdateDistance = formatDistanceToNow(
     new Date(insights.nextUpdate),
     { addSuffix: true },
   );
-  return <div></div>;
-};
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <Badge variant="outline">Last updated:{lastUpdatedDate}</Badge>
+      </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className={"text-sm font-medium"}>Market Outlook</CardTitle>
+            <OutlookIcon className={`h-4 w-4 ${OutlookColor}`} />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{insights.marketOutlook}</div>
+            <p className="text-xs text-muted-foreground">
+              Next update {nextUpdateDistance}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
 export default DashboardView;
