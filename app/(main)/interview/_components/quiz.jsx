@@ -3,9 +3,17 @@ import { Button } from "@/components/ui/button";
 import useFetch from "@/hooks/use-fetch";
 import React from "react";
 import { useState } from "react";
-import {Card,CardContent,CardFooter,CardHeader,CardTitle,} from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { BarLoader } from "react-spinners";
 import { useEffect } from "react";
+import { RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -19,19 +27,34 @@ const Quiz = () => {
   } = useFetch(generateQuiz);
 
   useEffect(() => {
-    if(quizData){
-        setAnswers(new Array(quizData.length).fill(null));
-    }  
+    if (quizData) {
+      setAnswers(new Array(quizData.length).fill(null));
+    }
   }, [quizData]);
-  
 
-  if(generatingQuiz){
-    return <BarLoader className="mt-4" width={"100%"} color="gray"/>;
+  const handleAnswer = (answer) => {
+    const newAnswers = [...answers];
+    newAnswers[currentQuestion] = answer;
+    setAnswers(newAnswers);
+  };
+
+  const handleNext = () => {
+    if (currentQuestion < quizData.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      setShowExplanation(false);
+    } else {
+      finishQuiz();
+    }
+  };
+
+
+  if (generatingQuiz) {
+    return <BarLoader className="mt-4" width={"100%"} color="gray" />;
   }
 
   if (!quizData) {
     return (
-       <Card className="mx-2">
+      <Card className="mx-2">
         <CardHeader>
           <CardTitle>Ready to test your knowledge?</CardTitle>
         </CardHeader>
@@ -50,14 +73,69 @@ const Quiz = () => {
     );
   }
 
-//   const {
-//     loading: savingResult,
-//     fn: saveQuizResultFn,
-//     data: resultData,
-//     setData: setResultData,
-//   } = useFetch(saveQuizResult);
+  const question = quizData[currentQuestion];
 
-  return <div></div>;
+  //   const {
+  //     loading: savingResult,
+  //     fn: saveQuizResultFn,
+  //     data: resultData,
+  //     setData: setResultData,
+  //   } = useFetch(saveQuizResult);
+
+  return (
+    <Card className="mx-2">
+      <CardHeader>
+        <CardTitle>
+          Question {currentQuestion + 1} of {quizData.length}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <p className="text-lg font-medium">{question.question}</p>
+        <RadioGroup
+          onValueChange={handleAnswer}
+          value={answers[currentQuestion]}
+          className="space-y-2"
+        >
+          {question.options.map((option, index) => (
+            <div key={index} className="flex items-center space-x-2">
+              <RadioGroupItem value={option} id={`option-${index}`} />
+              <Label htmlFor={`option-${index}`}>{option}</Label>
+            </div>
+          ))}
+        </RadioGroup>
+
+        {showExplanation && (
+          <div className="mt-4 p-4 bg-muted rounded-lg">
+            <p className="font-medium">Explanation:</p>
+            <p className="text-muted-foreground">{question.explanation}</p>
+          </div>
+        )}
+      </CardContent>
+           <CardFooter className="flex justify-between">
+        {!showExplanation && (
+          <Button
+            onClick={() => setShowExplanation(true)}
+            variant="outline"
+            disabled={!answers[currentQuestion]}
+          >
+            Show Explanation
+          </Button>
+        )}
+        <Button
+          onClick={handleNext}
+          disabled={!answers[currentQuestion] || savingResult}
+          className="ml-auto"
+        >
+          {savingResult && (
+            <BarLoader className="mt-4" width={"100%"} color="gray" />
+          )}
+          {currentQuestion < quizData.length - 1
+            ? "Next Question"
+            : "Finish Quiz"}
+        </Button>
+      </CardFooter>
+    </Card>
+  );
 };
 
 export default Quiz;
