@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import useFetch from "@/hooks/use-fetch";
 import React from "react";
+import { generateQuiz, saveQuizResult } from "@/actions/interview";
 import { useState } from "react";
 import {
   Card,
@@ -12,8 +13,10 @@ import {
 } from "@/components/ui/card";
 import { BarLoader } from "react-spinners";
 import { useEffect } from "react";
-import { RadioGroupItem } from "@/components/ui/radio-group";
+import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import QuizResult from "./quiz-result";
 
 const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -25,6 +28,13 @@ const Quiz = () => {
     fn: generateQuizFn,
     data: quizData,
   } = useFetch(generateQuiz);
+
+  const {
+    loading: savingResult,
+    fn: saveQuizResultFn,
+    data: resultData,
+    setData: setResultData,
+  } = useFetch(saveQuizResult);
 
   useEffect(() => {
     if (quizData) {
@@ -47,10 +57,47 @@ const Quiz = () => {
     }
   };
 
+   const calculateScore = () => {
+    let correct = 0;
+    answers.forEach((answer, index) => {
+      if (answer === quizData[index].correctAnswer) {
+        correct++;
+      }
+    });
+    return (correct / quizData.length) * 100;
+  };
+
+  const finishQuiz = async () => {
+    const score = calculateScore();
+    try {
+      await saveQuizResultFn(quizData, answers, score);
+      toast.success("Quiz completed!");
+    } catch (error) {
+      toast.error(error.message || "Failed to save quiz results");
+    }
+  };
+
+   const startNewQuiz = () => {
+    setCurrentQuestion(0);
+    setAnswers([]);
+    setShowExplanation(false);
+    generateQuizFn();
+    setResultData(null);
+  };
 
   if (generatingQuiz) {
     return <BarLoader className="mt-4" width={"100%"} color="gray" />;
   }
+
+   // Show results if quiz is completed
+  if (resultData) {
+    return (
+      <div className="mx-2">
+        <QuizResult result={resultData} onStartNew={startNewQuiz} />
+      </div>
+    );
+  }
+
 
   if (!quizData) {
     return (
@@ -74,13 +121,6 @@ const Quiz = () => {
   }
 
   const question = quizData[currentQuestion];
-
-  //   const {
-  //     loading: savingResult,
-  //     fn: saveQuizResultFn,
-  //     data: resultData,
-  //     setData: setResultData,
-  //   } = useFetch(saveQuizResult);
 
   return (
     <Card className="mx-2">
@@ -111,7 +151,7 @@ const Quiz = () => {
           </div>
         )}
       </CardContent>
-           <CardFooter className="flex justify-between">
+      <CardFooter className="flex justify-between">
         {!showExplanation && (
           <Button
             onClick={() => setShowExplanation(true)}
