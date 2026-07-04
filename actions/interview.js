@@ -78,8 +78,10 @@ export async function saveQuizResult(questions, answers, score) {
     explanation: q.explanation,
   }));
 
+
   // Get wrong answers
   const wrongAnswers = questionResults.filter((q) => !q.isCorrect);
+  let improvementTip = null;
 
   if (wrongAnswers.length > 0) {
     const wrongQuestionsText = wrongAnswers
@@ -99,5 +101,32 @@ export async function saveQuizResult(questions, answers, score) {
       Keep the response under 2 sentences and make it encouraging.
       Don't explicitly mention the mistakes, instead focus on what to learn/practice.
     `;
+
+    try {
+      const result = await model.generateContent(improvementPrompt);
+      const response = result.response;
+      improvementTip = response.text().trim();
+
+    } catch (error) {
+        console.error("Error generating improvement tip:", error)
+    }
   }
+
+  try {
+       const assessment = await db.assessment.create({
+      data: {
+        userId: user.id,
+        quizScore: score,
+        questions: questionResults,
+        category: "Technical",
+        improvementTip,
+      },
+    });
+
+    return assessment;
+  } catch (error) {
+    console.error("Error saving quiz result:", error);
+    throw new Error("Failed to save quiz result");
+  }
+
 }
