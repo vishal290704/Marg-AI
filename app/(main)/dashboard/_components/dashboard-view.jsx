@@ -71,6 +71,7 @@ const DashboardView = ({ insights }) => {
   const nextUpdateDistance = formatDistanceToNow(
     new Date(insights.nextUpdate),
     { addSuffix: true },
+
   );
   return (
     <div className="space-y-6">
