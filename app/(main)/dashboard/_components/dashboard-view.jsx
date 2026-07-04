@@ -140,6 +140,7 @@ const DashboardView = ({ insights }) => {
             />
           </CardContent>
         </Card>
+
         {/* Top Skills Card  */}
         <Card
           className={
@@ -347,6 +348,7 @@ const DashboardView = ({ insights }) => {
           </div>
         </CardContent>
       </Card>
+
       {/* Industry Insights */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {/* Industry Trends */}
