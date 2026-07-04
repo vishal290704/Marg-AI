@@ -1,31 +1,10 @@
 "use client";
 
 import React from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
-import {
-  BriefcaseIcon,
-  LineChart,
-  TrendingUp,
-  TredingDown,
-  Brain,
-} from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,} from "recharts";
+import {BriefcaseIcon,LineChart,TrendingUp,TredingDown,Brain,} from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import {Card,CardContent, CardDescription,CardHeader,CardTitle,} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
