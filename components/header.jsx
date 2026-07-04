@@ -27,16 +27,16 @@ import {
 const Header = () => {
     // await checkUser()
   return (
-    <header className="fixed top-0 w-full border bg-background/80 backdrop-blur-md z-50 supports-backdrop-filter:bg-background/60">
+    <header className="fixed top-0 w-full border bg-background backdrop-blur-md z-50 supports-backdrop-filter:bg-background/60">
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/">
           <Image
-            src="/list.png"
-            width={200}
-            height={60}
+            src="/marg-ai.png"
+            width={250}
+            height={90}
             alt="MargAI Logo"
-            className="h-12 py-1 w-auto object-contain"
+            className="h-18 py-1 w-auto object-contain"
           />
         </Link>
 
