@@ -20,11 +20,8 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 
 import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
 
 const PerformanceChart = ({ assessments }) => {
-
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
@@ -37,9 +34,66 @@ const PerformanceChart = ({ assessments }) => {
     }
   }, [assessments]);
 
-
-  
-  return <div>PerformanceChart</div>;
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="gradient-title text-3xl md:text-4xl">
+          Performance Trend
+        </CardTitle>
+        <CardDescription>Your quiz scores over time</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid
+                stroke="#3F3F46"
+                strokeDasharray="3 3"
+                vertical={true}
+                horizontal={true}
+              />
+              <XAxis dataKey="date" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip
+                content={({ active, payload }) => {
+                  if (active && payload?.length) {
+                    return (
+                      <div className="bg-background border rounded-lg p-2 shadow-md">
+                        <p className="text-sm font-medium">
+                          Score: {payload[0].value}%
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {payload[0].payload.date}
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <defs>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <Line
+                type="natural"
+                dataKey="score"
+                stroke="#3B82F6"
+                strokeWidth={3}
+                dot={{ r: 5, fill: "#3B82F6", stroke: "#fff", strokeWidth: 2 }}
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
+  );
 };
 
 export default PerformanceChart;
