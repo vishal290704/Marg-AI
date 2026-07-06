@@ -23,13 +23,17 @@ export async function generateQuiz() {
 
   try {
     const prompt = `
-    Generate 10 technical interview questions for a ${
+    Generate exactly 10 technical interview questions for a ${
       user.industry
     } professional${
       user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
     }.
     
-    Each question should be multiple choice with 4 options.
+    Questions should cover different concepts related to the industry and skills.
+    Difficulty should range from beginner to advanced.
+    Each question should be multiple choice with 4 options. Only ONE option must be correct.
+    The "correctAnswer" value MUST exactly match one of the options.
+    Do not repeat questions or options.
     
     Return the response in this JSON format only, no additional text:
     {
@@ -91,16 +95,26 @@ export async function saveQuizResult(questions, answers, score) {
       )
       .join("\n\n");
 
-    const improvementPrompt = `
-      The user got the following ${user.industry} technical interview questions wrong:
+   const improvementPrompt = `
+You are an experienced technical interview coach.
 
-      ${wrongQuestionsText}
+The user answered the following ${user.industry} interview questions incorrectly:
 
-      Based on these mistakes, provide a concise, specific improvement tip.
-      Focus on the knowledge gaps revealed by these wrong answers.
-      Keep the response under 2 sentences and make it encouraging.
-      Don't explicitly mention the mistakes, instead focus on what to learn/practice.
-    `;
+${wrongQuestionsText}
+
+Analyze the mistakes and identify the user's biggest knowledge gap.
+
+Return ONLY one concise improvement tip that:
+- Is 1-2 sentences (maximum 35 words).
+- Is specific to the concepts the user needs to improve.
+- Recommends what to study or practice next.
+- Is encouraging and actionable.
+- Does NOT mention the user's incorrect answers, score, or that they made mistakes.
+- Do NOT use bullet points, headings, or quotation marks.
+
+Example style:
+"Strengthen your understanding of asynchronous JavaScript by practicing Promises, async/await, and event loop concepts through small coding exercises."
+`;
 
     try {
       const result = await model.generateContent(improvementPrompt);
@@ -149,7 +163,7 @@ export async function getAssessments() {
         userId: user.id,
       },
       orderBy: {
-        createdAt: "asc",
+        createdAt: "desc",
       },
     });
 

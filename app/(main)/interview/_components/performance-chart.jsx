@@ -81,7 +81,7 @@ const PerformanceChart = ({ assessments }) => {
                 </filter>
               </defs>
               <Line
-                type="natural"
+                type="monotone"
                 dataKey="score"
                 stroke="#3B82F6"
                 strokeWidth={3}
