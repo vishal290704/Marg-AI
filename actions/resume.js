@@ -37,3 +37,22 @@ export async function saveResume(content) {
     throw new Error("Failed to save resume");
   }
 }
+
+
+
+export async function getResume() {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const user = await db.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+
+  if (!user) throw new Error("User not found");
+
+  return await db.resume.findUnique({
+    where: {
+      userId: user.id,
+    },
+  });
+}
