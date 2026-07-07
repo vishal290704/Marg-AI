@@ -18,30 +18,42 @@ export async function generateCoverLetter(data) {
   if (!user) throw new Error("User not found");
 
   const prompt = `
-    Write a professional cover letter for a ${data.jobTitle} position at ${
-    data.companyName
-  }.
-    
-    About the candidate:
-    - Industry: ${user.industry}
-    - Years of Experience: ${user.experience}
-    - Skills: ${user.skills?.join(", ")}
-    - Professional Background: ${user.bio}
-    
-    Job Description:
-    ${data.jobDescription}
-    
-    Requirements:
-    1. Use a professional, enthusiastic tone
-    2. Highlight relevant skills and experience
-    3. Show understanding of the company's needs
-    4. Keep it concise (max 400 words)
-    5. Use proper business letter formatting in markdown
-    6. Include specific examples of achievements
-    7. Relate candidate's background to job requirements
-    
-    Format the letter in markdown.
-  `;
+Write a professional cover letter for the position of "${data.jobTitle}" at "${data.companyName}".
+
+## Candidate Information
+- Industry: ${user.industry}
+- Years of Experience: ${user.experience}
+- Skills: ${user.skills?.join(", ")}
+- Professional Background: ${user.bio}
+- Name: ${user.name}
+- Email: ${user.email}
+
+## Job Description
+${data.jobDescription}
+
+## Requirements
+
+- Write in a professional, confident, and enthusiastic tone.
+- Tailor the cover letter specifically to the job description.
+- Highlight the candidate's most relevant skills and experience.
+- Relate the candidate's background to the company's requirements.
+- Mention measurable achievements wherever appropriate.
+- Keep the cover letter under **400 words**.
+- Use proper business letter structure:
+  - Date
+  - Hiring Manager (or Hiring Team if unknown)
+  - Subject
+  - Greeting
+  - Body
+  - Closing
+- Use the candidate's actual information provided above.
+- **Do NOT use placeholders** such as [Your Name], [Your Email], [Company Address], etc. If information is unavailable, simply omit it.
+- Return **ONLY valid GitHub-Flavored Markdown**.
+- Do **NOT** generate HTML.
+- Do **NOT** generate \`<script>\`, \`<style>\`, \`<iframe>\`, \`<svg>\`, or any HTML tags.
+- Do **NOT** wrap the response inside triple backticks (\`\`\`markdown).
+- Return only the cover letter content with no explanations or extra text.
+`;
 
   try {
     const result = await model.generateContent(prompt);
