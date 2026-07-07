@@ -43,12 +43,7 @@ const Header = () => {
         <div className="flex items-center gap-2 md:gap-4">
           {/* Show only when signed in */}
           <Show when="signed-in">
-            <Link href="/workspace">
-              <Button variant="outline">
-                <LayoutDashboard className="h-4 w-4" />
-                <span className="hidden md:block">Industry Insights</span>
-              </Button>
-            </Link>
+          
 
             {/* Growth Tools */}
             <DropdownMenu>

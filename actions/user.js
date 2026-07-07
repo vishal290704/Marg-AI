@@ -5,9 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { success } from "zod";
 import { generatedAIInsights } from "./dashboard";
 
-
 export async function updateUser(data) {
-
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
@@ -21,19 +19,23 @@ export async function updateUser(data) {
 
   try {
     // Check if industry already exists
+    const formattedIndustry = `${data.industry}-${data.subIndustry
+      .toLowerCase()
+      .replace(/ /g, "-")}`;
+
     let industryInsight = await db.industryInsight.findUnique({
       where: {
-        industry: data.industry,
+        industry: formattedIndustry,
       },
     });
 
     // Call Gemini OUTSIDE transaction
     if (!industryInsight) {
-      const insights = await generatedAIInsights(data.industry);
+      const insights = await generatedAIInsights(formattedIndustry);
 
       industryInsight = await db.industryInsight.create({
         data: {
-          industry: data.industry,
+          industry: formattedIndustry,
           ...insights,
           nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         },
@@ -46,7 +48,8 @@ export async function updateUser(data) {
         id: user.id,
       },
       data: {
-        industry: data.industry,
+        industry: formattedIndustry,
+        subIndustry: data.subIndustry,
         experience: data.experience,
         bio: data.bio,
         skills: data.skills,
@@ -67,9 +70,7 @@ export async function updateUser(data) {
 export async function getUserOnboardingStatus() {
   const { userId } = await auth();
 
-  if (!userId) {
-    throw new Error("Unauthorized");
-  }
+  if (!userId) throw new Error("Unauthorized");
 
   const user = await db.user.findUnique({
     where: {
@@ -77,14 +78,17 @@ export async function getUserOnboardingStatus() {
     },
     select: {
       industry: true,
+      subIndustry: true,
+      experience: true,
+      bio: true,
+      skills: true,
     },
   });
 
-  if (!user) {
-    throw new Error("User not found");
-  }
+  if (!user) throw new Error("User not found");
 
   return {
     isOnboarded: !!user.industry,
+    user,
   };
 }

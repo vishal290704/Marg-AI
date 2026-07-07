@@ -1,22 +1,23 @@
-import { getUserOnboardingStatus } from '@/actions/user'
-import { industries } from '@/data/industries'
-import { redirect } from 'next/navigation'
-import React from 'react'
-import OnboardingForm from './_components/onboarding-form'
+import { getUserOnboardingStatus } from "@/actions/user";
+import { industries } from "@/data/industries";
+import { redirect } from "next/navigation";
+import React from "react";
+import OnboardingForm from "./_components/onboarding-form";
 
-const OnboardingPage =async () => {
-//Check if user is already onboarded
+const OnboardingPage = async () => {
+  const { isOnboarded, user } = await getUserOnboardingStatus();
 
-const {isOnboarded} =await getUserOnboardingStatus()
-if(isOnboarded){
-    redirect("/dashboard")
-}
+  // Only redirect if already onboarded AND this is not edit mode
+  // (We'll improve this logic later if you're using ?edit=true)
 
   return (
     <main>
-        <OnboardingForm industries={industries}/>
+      <OnboardingForm
+        industries={industries}
+        initialData={user}
+      />
     </main>
-  )
-}
+  );
+};
 
-export default OnboardingPage
+export default OnboardingPage;

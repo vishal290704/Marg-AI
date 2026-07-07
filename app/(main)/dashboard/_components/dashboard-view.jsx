@@ -2,13 +2,17 @@
 
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,} from "recharts";
-import {BriefcaseIcon,LineChart,TrendingUp,TredingDown,Brain,} from "lucide-react";
+import {BriefcaseIcon,LineChart,TrendingUp,TredingDown,Brain, Link, LayoutDashboard,} from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import {Card,CardContent, CardDescription,CardHeader,CardTitle,} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@base-ui/react";
+import { useRouter } from "next/navigation";
 
 const DashboardView = ({ insights }) => {
+
+  const router = useRouter();
   const salaryData = insights.salaryRanges.map((range) => ({
     name: range.role,
     min: range.min / 1000,
@@ -54,9 +58,32 @@ const DashboardView = ({ insights }) => {
   );
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <Badge variant="outline">Last updated:{lastUpdatedDate}</Badge>
-      </div>
+   <div className="flex items-center justify-between rounded-xl border bg-card p-4 shadow-sm mb-6">
+  <Button
+    variant="ghost"
+    onClick={() => router.push("/")}
+    className="gap-2 text-muted-foreground hover:text-foreground"
+  >
+    ← Back to Home
+  </Button>
+
+  <Button
+  variant="outline"
+  onClick={() => router.push("/onboarding?edit=true")}
+>
+  Change Industry
+</Button>
+
+  <div className="flex items-center gap-2">
+    <span className="text-sm text-muted-foreground">
+      Last updated
+    </span>
+
+    <Badge variant="outline" className="font-medium">
+      {lastUpdatedDate}
+    </Badge>
+  </div>
+</div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Market Outlook Card  */}

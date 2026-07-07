@@ -4,8 +4,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {Card,CardContent,CardDescription,CardHeader,CardTitle,} from "@/components/ui/card";
-import {Select, SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,14 +27,14 @@ import { updateUser } from "@/actions/user";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-const OnboardingForm = ({ industries }) => {
+const OnboardingForm = ({ industries, initialData }) => {
   const [selectedIndustry, setSelectedIndustry] = useState(null);
   const router = useRouter();
-    const {
-        loading:updateLoading,
-        fn:updateUserFn,
-        data:updateResult,
-    } =useFetch(updateUser)
+  const {
+    loading: updateLoading,
+    fn: updateUserFn,
+    data: updateResult,
+  } = useFetch(updateUser);
 
   const {
     register,
@@ -32,32 +44,64 @@ const OnboardingForm = ({ industries }) => {
     watch,
   } = useForm({
     resolver: zodResolver(onboardingSchema),
+    defaultValues: {
+      experience: initialData?.experience ?? "",
+      skills: initialData?.skills?.join(", ") ?? "",
+      bio: initialData?.bio ?? "",
+    },
   });
 
   const onSubmit = async (values) => {
-    try {
-        const formattedIndustry = `${values.industry}-${values.subIndustry
-            .toLowerCase()
-            .replace(/ /g, "-")
-        }`
-
-        await updateUserFn({
-            ...values,
-            industry: formattedIndustry,
-        })
-    } catch (error) {
-        console.log("Onboarding error:", error)
-    }
-  };
+  try {
+    await updateUserFn(values);
+  } catch (error) {
+    console.log("Onboarding error:", error);
+  }
+};
 
   useEffect(() => {
-    if(updateResult?.success && !updateLoading){
-        toast.success("Profile Completed Successfully!")
-        router.push("/dashboard")
-        router.refresh()
+    if (updateResult?.success && !updateLoading) {
+      toast.success(
+        initialData?.industry
+          ? "Profile updated successfully!"
+          : "Profile completed successfully!",
+      );
+      router.push("/dashboard");
+      router.refresh();
     }
-  }, [updateResult, updateLoading])
-  
+  }, [updateResult, updateLoading]);
+
+  useEffect(() => {
+    if (!initialData) return;
+
+    // Experience
+    setValue("experience", initialData.experience?.toString() || "");
+
+    // Skills
+    setValue("skills", initialData.skills?.join(", ") || "");
+
+    // Bio
+    setValue("bio", initialData.bio || "");
+
+    // Industry
+    if (initialData.industry) {
+      const industryName = initialData.industry.split("-")[0];
+
+      const matchedIndustry = industries.find(
+        (ind) => ind.name.toLowerCase() === industryName.toLowerCase(),
+      );
+
+      if (matchedIndustry) {
+        setSelectedIndustry(matchedIndustry);
+        setValue("industry", matchedIndustry.name);
+      }
+    }
+
+    // Sub Industry
+    if (initialData.subIndustry) {
+      setValue("subIndustry", initialData.subIndustry);
+    }
+  }, [initialData, industries, setValue]);
 
   const watchIndustry = watch("industry");
   return (
@@ -80,6 +124,7 @@ const OnboardingForm = ({ industries }) => {
                 Industry
               </Label>
               <Select
+                value={watch("industry")}
                 onValueChange={(value) => {
                   setValue("industry", value);
                   setSelectedIndustry(
@@ -115,6 +160,7 @@ const OnboardingForm = ({ industries }) => {
                   Specialization
                 </Label>
                 <Select
+                  value={watch("subIndustry")}
                   onValueChange={(value) => setValue("subIndustry", value)}
                 >
                   <SelectTrigger className="w-full" id="subIndustry">
@@ -196,13 +242,16 @@ const OnboardingForm = ({ industries }) => {
             </div>
 
             <Button type="submit" className="w-full" disabled={updateLoading}>
-                {updateLoading ? (
-                    <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
-                    Saving...
-                    </>
-                ) : ("Complete Profile")
-            }
+              {updateLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : initialData?.industry ? (
+                "Update Profile"
+              ) : (
+                "Complete Profile"
+              )}
             </Button>
           </form>
         </CardContent>
