@@ -11,6 +11,10 @@ import {
   Monitor,
   Save,
 } from "lucide-react";
+
+import { pdf } from "@react-pdf/renderer";
+import ResumePDF from "./resume-pdf";
+
 import { toast } from "sonner";
 import MDEditor from "@uiw/react-md-editor";
 import { Button } from "@/components/ui/button";
@@ -23,7 +27,6 @@ import useFetch from "@/hooks/use-fetch";
 import { useUser } from "@clerk/nextjs";
 import { entriesToMarkdown } from "@/app/lib/helper";
 import { resumeSchema } from "@/app/lib/schema";
-import html2pdf from "html2pdf.js/dist/html2pdf.min.js";
 
 const ResumeBuilder = ({ initialContent }) => {
   const [activeTab, setActiveTab] = useState("edit");
@@ -114,35 +117,55 @@ const ResumeBuilder = ({ initialContent }) => {
 
   const generatePDF = async () => {
     setIsGenerating(true);
-    try {
-      const element = document.getElementById("resume-pdf");
-      const opt = {
-        margin: [15, 15],
-        filename: "resume.pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      };
 
-      await html2pdf().set(opt).from(element).save();
-    } catch (error) {
-      console.error("PDF generation error:", error);
+    try {
+      const blob = await pdf(
+        <ResumePDF
+          user={user}
+          contactInfo={formValues.contactInfo}
+          summary={formValues.summary}
+          skills={formValues.skills}
+          experience={formValues.experience}
+          education={formValues.education}
+          projects={formValues.projects}
+        />,
+      ).toBlob();
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "resume.pdf";
+      link.click();
+
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to generate PDF");
     } finally {
       setIsGenerating(false);
     }
   };
 
   const onSubmit = async (data) => {
+    console.log("===== onSubmit called =====");
+    console.log("Form Data:", data);
+
     try {
       const formattedContent = previewContent
-        .replace(/\n/g, "\n") // Normalize newlines
-        .replace(/\n\s*\n/g, "\n\n") // Normalize multiple newlines to double newlines
+        .replace(/\n/g, "\n")
+        .replace(/\n\s*\n/g, "\n\n")
         .trim();
 
-      console.log(previewContent, formattedContent);
-      await saveResumeFn(previewContent);
+      console.log("Preview Content:", previewContent);
+      console.log("Formatted Content:", formattedContent);
+
+      console.log("Calling saveResumeFn...");
+      await saveResumeFn(formattedContent);
+      console.log("saveResumeFn finished");
     } catch (error) {
       console.error("Save error:", error);
+      toast.error(error.message || "Save failed");
     }
   };
 
@@ -155,20 +178,10 @@ const ResumeBuilder = ({ initialContent }) => {
         <div className="space-x-2">
           <Button
             variant="destructive"
-            onClick={handleSubmit(onSubmit)}
+            onClick={() => onSubmit(formValues)}
             disabled={isSaving}
           >
-            {isSaving ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="h-4 w-4" />
-                Save
-              </>
-            )}
+            Save
           </Button>
           <Button onClick={generatePDF} disabled={isGenerating}>
             {isGenerating ? (
@@ -399,17 +412,6 @@ const ResumeBuilder = ({ initialContent }) => {
               height={800}
               preview={resumeMode}
             />
-          </div>
-          <div className="hidden">
-            <div id="resume-pdf">
-              <MDEditor.Markdown
-                source={previewContent}
-                style={{
-                  background: "white",
-                  color: "black",
-                }}
-              />
-            </div>
           </div>
         </TabsContent>
       </Tabs>
