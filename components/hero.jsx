@@ -8,47 +8,56 @@ import "../app/globals.css";
 const HeroSection = () => {
   const imageRef = useRef(null);
 
-useEffect(() => {
-  const handleScroll = () => {
-    if (!imageRef.current) return;
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!imageRef.current) return;
 
-    if (window.scrollY > 100) {
-      imageRef.current.classList.add("scrolled");
-    } else {
-      imageRef.current.classList.remove("scrolled");
-    }
-  };
+      if (window.scrollY > 100) {
+        imageRef.current.classList.add("scrolled");
+      } else {
+        imageRef.current.classList.remove("scrolled");
+      }
+    };
 
-  window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
-  };
-}, []);  
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <section className="w-full pt-36 md:pt-48 pb-10">
       <div className="space-y-6 text-center">
-        <div className="space-y-6 mx-auto">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl bg-gradient-to-b from-gray-400 via-gray-200 to-gray-600 text-transparent bg-clip-text font-extrabold tracking-tighter pb-2 pr-2">
-            Your AI Career Coach for
+        <div className="mx-auto max-w-5xl space-y-8 text-center">
+          <h1 className="text-5xl font-extrabold leading-[1.05] tracking-tight md:text-6xl lg:text-7xl xl:text-8xl">
+            <span className="bg-gradient-to-r from-white via-zinc-100 to-zinc-300 bg-clip-text text-transparent">
+              Your AI Career Coach
+            </span>
+
             <br />
-            Professional Success
+
+            <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              for Professional Success
+            </span>
           </h1>
-          <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl">
-            Advance your career with personalized guidance, interview prep, and
-            AI-powered tools for job success.
+
+          <p className="mx-auto max-w-3xl text-lg leading-8 text-zinc-400 md:text-xl">
+            Advance your career with AI-powered interview preparation, resume
+            optimization, personalized guidance, and industry insights designed
+            to help you achieve your professional goals.
           </p>
         </div>
 
         <div className="flex justify-center space-x-4">
           <Link href="/dashboard">
-            <Button size="lg" className="px-8">
+            <Button size="lg" className="px-8 h-12">
               Get Started
             </Button>
           </Link>
-          {/* Can add another link button here */}
         </div>
+        {/* Can add another link button here */}
+
         <div className="hero-image-wrapper mt-5 md:mt-0">
           <div ref={imageRef} className="hero-image">
             <Image
