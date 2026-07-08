@@ -162,13 +162,12 @@ export default function RootLayout({ children }) {
       <div className="flex flex-col items-center justify-between gap-3 text-sm text-zinc-500 md:flex-row">
         <p>© {new Date().getFullYear()} MargAI. All rights reserved.</p>
 
-        <p className="text-center md:text-right">
-          Built with ❤️ using{" "}
-          <span className="font-medium text-zinc-300">Next.js</span>,
-          <span className="font-medium text-zinc-300"> Clerk</span>,
-          <span className="font-medium text-zinc-300"> Prisma</span> &
-          <span className="font-medium text-zinc-300"> Gemini AI</span>.
-        </p>
+   <p className="text-center md:text-right">
+  Designed & Engineered with{" "}
+  <span className="font-medium text-zinc-300"> 
+    Next.js • React • Tailwind CSS • Shadcn/UI • Clerk • Prisma • Gemini AI
+  </span>
+</p>
       </div>
     </div>
   </div>
