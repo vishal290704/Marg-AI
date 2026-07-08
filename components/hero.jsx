@@ -32,20 +32,20 @@ const HeroSection = () => {
         <div className="mx-auto max-w-5xl space-y-8 text-center">
           <h1 className="text-5xl font-extrabold leading-[1.05] tracking-tight md:text-6xl lg:text-7xl xl:text-8xl">
             <span className="bg-gradient-to-r from-white via-zinc-100 to-zinc-300 bg-clip-text text-transparent">
-              Your AI Career Coach
+              Your AI Career Companion 
             </span>
 
             <br />
 
             <span className="bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              for Professional Success
+              for Professional Growth
             </span>
           </h1>
 
           <p className="mx-auto max-w-3xl text-lg leading-8 text-zinc-400 md:text-xl">
-            Advance your career with AI-powered interview preparation, resume
-            optimization, personalized guidance, and industry insights designed
-            to help you achieve your professional goals.
+           Accelerate your career with AI-powered resume building, cover letter generation, 
+           interview preparation, personalized career guidance, and real-time industry 
+           insights—all in one intelligent platform.
           </p>
         </div>
 

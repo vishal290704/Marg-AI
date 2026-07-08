@@ -75,9 +75,9 @@ export default function CoverLetterList({ coverLetters }) {
                     <Eye className="h-4 w-4" />
                   </Button>
                   <AlertDialogTrigger asChild>
-                    <Button variant="outline" size="icon">
+                    {/* <Button variant="outline" size="icon"> */}
                       <Trash2 className="h-4 w-4" />
-                    </Button>
+                    {/* </Button> */}
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
