@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 import { Brain, Target, Trophy } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-
-const StatsCards = ({assessments}) => {
-
-    const getAverageScore = () => {
+const StatsCards = ({ assessments }) => {
+  const getAverageScore = () => {
     if (!assessments?.length) return 0;
     const total = assessments.reduce(
       (sum, assessment) => sum + assessment.quizScore,
@@ -14,14 +12,13 @@ const StatsCards = ({assessments}) => {
     return (total / assessments.length).toFixed(1);
   };
 
-
   const getLatestAssessment = () => {
-  if (!assessments?.length) return null;
+    if (!assessments?.length) return null;
 
-  return [...assessments].sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  )[0];
-};
+    return [...assessments].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    )[0];
+  };
 
   const getTotalQuestions = () => {
     if (!assessments?.length) return 0;
@@ -31,49 +28,93 @@ const StatsCards = ({assessments}) => {
     );
   };
 
-
   return (
-    <div className="grid gap-4 md:grid-cols-3">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Average Score</CardTitle>
-          <Trophy className="h-4 w-4 text-muted-foreground" />
+    <div className="grid gap-6 md:grid-cols-3">
+      {/* Average Score */}
+      <Card className="group relative overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 via-slate-900 to-yellow-950/30 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-yellow-500/30 hover:shadow-[0_0_35px_rgba(250,204,21,0.18)]">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-yellow-300/40 to-transparent" />
+        <div className="absolute -right-16 -top-16 h-36 w-36 rounded-full bg-yellow-500/10 blur-3xl transition-all duration-300 group-hover:scale-125 group-hover:opacity-100" />
+
+        <CardHeader className="relative flex flex-row items-center justify-between pb-3">
+          <div>
+            <CardTitle className="text-sm font-medium text-zinc-400">
+              Average Score
+            </CardTitle>
+          </div>
+
+          <div className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 p-3 transition-all duration-300 group-hover:scale-110 group-hover:bg-yellow-500/20">
+            <Trophy className="h-5 w-5 text-yellow-400" />
+          </div>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{getAverageScore()}%</div>
-          <p className="text-xs text-muted-foreground">
+
+        <CardContent className="relative">
+          <h2 className="text-4xl font-bold tracking-tight text-white">
+            {getAverageScore()}%
+          </h2>
+
+          <p className="mt-2 text-sm text-zinc-400">
             Across all assessments
           </p>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">
-            Questions Practiced
-          </CardTitle>
-          <Brain className="h-4 w-4 text-muted-foreground" />
+      {/* Questions Practiced */}
+      <Card className="group relative overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 via-slate-900 to-cyan-950/30 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/30 hover:shadow-[0_0_35px_rgba(34,211,238,0.18)]">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent" />
+        <div className="absolute -right-16 -top-16 h-36 w-36 rounded-full bg-cyan-500/10 blur-3xl transition-all duration-300 group-hover:scale-125 group-hover:opacity-100" />
+
+        <CardHeader className="relative flex flex-row items-center justify-between pb-3">
+          <div>
+            <CardTitle className="text-sm font-medium text-zinc-400">
+              Questions Practiced
+            </CardTitle>
+          </div>
+
+          <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 p-3 transition-all duration-300 group-hover:scale-110 group-hover:bg-cyan-500/20">
+            <Brain className="h-5 w-5 text-cyan-400" />
+          </div>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{getTotalQuestions()}</div>
-          <p className="text-xs text-muted-foreground">Total questions</p>
+
+        <CardContent className="relative">
+          <h2 className="text-4xl font-bold tracking-tight text-white">
+            {getTotalQuestions()}
+          </h2>
+
+          <p className="mt-2 text-sm text-zinc-400">
+            Total questions solved
+          </p>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Latest Score</CardTitle>
-          <Target className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">
-            {getLatestAssessment()?.quizScore.toFixed(1) || 0}%
+      {/* Latest Score */}
+      <Card className="group relative overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 via-slate-900 to-blue-950/30 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/30 hover:shadow-[0_0_35px_rgba(59,130,246,0.18)]">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-300/40 to-transparent" />
+        <div className="absolute -right-16 -top-16 h-36 w-36 rounded-full bg-blue-500/10 blur-3xl transition-all duration-300 group-hover:scale-125 group-hover:opacity-100" />
+
+        <CardHeader className="relative flex flex-row items-center justify-between pb-3">
+          <div>
+            <CardTitle className="text-sm font-medium text-zinc-400">
+              Latest Score
+            </CardTitle>
           </div>
-          <p className="text-xs text-muted-foreground">Most recent quiz</p>
+
+          <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 p-3 transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-500/20">
+            <Target className="h-5 w-5 text-blue-400" />
+          </div>
+        </CardHeader>
+
+        <CardContent className="relative">
+          <h2 className="text-4xl font-bold tracking-tight text-white">
+            {getLatestAssessment()?.quizScore.toFixed(1) || 0}%
+          </h2>
+
+          <p className="mt-2 text-sm text-zinc-400">
+            Most recent quiz
+          </p>
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default StatsCards
+export default StatsCards;

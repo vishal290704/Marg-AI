@@ -13,47 +13,120 @@ export default function QuizResult({
   if (!result) return null;
 
   return (
-    <div className="mx-auto">
-      <h1 className="flex items-center gap-2 text-3xl gradient-title">
-        <Trophy className="h-6 w-6 text-yellow-500" />
-        Quiz Results
-      </h1>
+    <div className="mx-auto space-y-8">
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <div className="rounded-2xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/20 to-orange-500/10 p-4">
+          <Trophy className="h-8 w-8 text-yellow-400" />
+        </div>
 
-      <CardContent className="space-y-6">
-        {/* Score Overview */}
-        <div className="text-center space-y-2">
-          <h3 className="text-2xl font-bold">{result.quizScore.toFixed(1)}%</h3>
-          <Progress value={result.quizScore} className="w-full" />
+        <div>
+          <h1 className="gradient-title text-4xl font-bold">
+            Quiz Results
+          </h1>
+          <p className="mt-1 text-zinc-400">
+            Review your performance and learn from every question.
+          </p>
+        </div>
+      </div>
+
+      <CardContent className="space-y-8 px-0">
+        {/* Score Card */}
+        <div className="rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 via-slate-900 to-blue-950/30 p-8 shadow-xl">
+          <div className="flex flex-col items-center justify-center text-center">
+            <p className="text-sm uppercase tracking-widest text-zinc-400">
+              Overall Score
+            </p>
+
+            <h2 className="mt-2 text-6xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              {result.quizScore.toFixed(1)}%
+            </h2>
+
+            <div className="mt-6 w-full">
+              <Progress value={result.quizScore} className="h-3 rounded-full" />
+            </div>
+          </div>
         </div>
 
         {/* Improvement Tip */}
         {result.improvementTip && (
-          <div className="bg-muted p-4 rounded-lg">
-            <p className="font-medium">Improvement Tip:</p>
-            <p className="text-muted-foreground">{result.improvementTip}</p>
+          <div className="rounded-2xl border border-blue-500/20 bg-gradient-to-br from-zinc-900 via-slate-900 to-blue-950/20 p-6 shadow-lg">
+            <h3 className="mb-2 text-lg font-semibold text-blue-400">
+              💡 Improvement Tip
+            </h3>
+
+            <p className="leading-7 text-zinc-300">
+              {result.improvementTip}
+            </p>
           </div>
         )}
 
-        {/* Questions Review */}
-        <div className="space-y-4">
-          <h3 className="font-medium">Question Review</h3>
+        {/* Questions */}
+        <div className="space-y-5">
+          <h2 className="text-2xl font-semibold text-white">
+            Question Review
+          </h2>
+
           {result.questions.map((q, index) => (
-            <div key={index} className="border rounded-lg p-4 space-y-2">
-              <div className="flex items-start justify-between gap-2">
-                <p className="font-medium">{q.question}</p>
+            <div
+              key={index}
+              className={`group rounded-2xl border p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 ${
+                q.isCorrect
+                  ? "border-green-500/20 bg-gradient-to-br from-zinc-900 via-slate-900 to-green-950/20 hover:border-green-400/40"
+                  : "border-red-500/20 bg-gradient-to-br from-zinc-900 via-slate-900 to-red-950/20 hover:border-red-400/40"
+              }`}
+            >
+              {/* Question */}
+              <div className="mb-5 flex items-start justify-between gap-4">
+                <h3 className="text-lg font-semibold leading-7 text-white">
+                  {index + 1}. {q.question}
+                </h3>
+
                 {q.isCorrect ? (
-                  <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
+                  <div className="rounded-full bg-green-500/10 p-2">
+                    <CheckCircle2 className="h-6 w-6 text-green-400" />
+                  </div>
                 ) : (
-                  <XCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
+                  <div className="rounded-full bg-red-500/10 p-2">
+                    <XCircle className="h-6 w-6 text-red-400" />
+                  </div>
                 )}
               </div>
-              <div className="text-sm text-muted-foreground">
-                <p>Your answer: {q.userAnswer}</p>
-                {!q.isCorrect && <p>Correct answer: {q.answer}</p>}
+
+              {/* Answers */}
+              <div className="space-y-3 rounded-xl border border-zinc-800 bg-black/20 p-4">
+                <div>
+                  <span className="text-sm font-medium text-zinc-400">
+                    Your Answer
+                  </span>
+
+                  <p className="mt-1 text-white">
+                    {q.userAnswer}
+                  </p>
+                </div>
+
+                {!q.isCorrect && (
+                  <div>
+                    <span className="text-sm font-medium text-green-400">
+                      Correct Answer
+                    </span>
+
+                    <p className="mt-1 text-green-300">
+                      {q.answer}
+                    </p>
+                  </div>
+                )}
               </div>
-              <div className="text-sm bg-muted p-2 rounded">
-                <p className="font-medium">Explanation:</p>
-                <p>{q.explanation}</p>
+
+              {/* Explanation */}
+              <div className="mt-5 rounded-xl border border-blue-500/20 bg-blue-500/5 p-5">
+                <p className="mb-2 font-semibold text-blue-400">
+                  Explanation
+                </p>
+
+                <p className="leading-7 text-zinc-300">
+                  {q.explanation}
+                </p>
               </div>
             </div>
           ))}
@@ -61,8 +134,11 @@ export default function QuizResult({
       </CardContent>
 
       {!hideStartNew && (
-        <CardFooter>
-          <Button onClick={onStartNew} className="w-full">
+        <CardFooter className="px-0">
+          <Button
+            onClick={onStartNew}
+            className="h-12 w-full rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-base font-semibold transition-all duration-300 hover:scale-[1.02] hover:from-cyan-400 hover:to-blue-500"
+          >
             Start New Quiz
           </Button>
         </CardFooter>
